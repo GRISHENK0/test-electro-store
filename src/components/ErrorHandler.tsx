@@ -1,10 +1,11 @@
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Button, Text, View } from 'react-native';
+import { __ } from '../i18n';
 import { errorHandlerStyles } from '../styles';
 
 const myErrorHandler = (error: Error) => {
-	console.log('Something went wrong', error);
+	console.log(__('somethingWentWrong'), error);
 };
 
 const ErrorFallback: ({
@@ -15,7 +16,7 @@ const ErrorFallback: ({
 	return (
 		<View style={[errorHandlerStyles.errorContainer]}>
 			<View>
-				<Text> Something went wrong: </Text>
+				<Text>{__('somethingWentWrong')}</Text>
 				<Button title="try Again" onPress={resetErrorBoundary} />
 			</View>
 		</View>
