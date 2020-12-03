@@ -3,20 +3,21 @@
   "version": "0.0.1",
   "private": false,
   "scripts": {
-		"android": "react-native run-android",
-		"android:prodmode": "react-native run-android --variant=release",
-		"ios": "react-native run-ios",
-		"start": "react-native start",
-		"test": "jest",
-		"lint": "prettier -l 'src/**/*.{ts,tsx}' '__tests__/**/*.{ts,tsx}' && eslint 'src/**/*.{ts,tsx}' '__tests__/**/*.{ts,tsx}'",
-		"fmt": "prettier --write 'src/**/*.{ts,tsx}' '__tests__/**/*.{ts,tsx}'",
-		"typecheck": "tsc",
-		"clean": "rm -rf android/.gradle android/app/build ios/build",
-		"generate:icon": "react-native set-icon --path assets/icon.png",
-		"generate:splashscreen": "react-native set-splash --path assets/splash.png --resize cover --background '#FFFFFF'"
-	},
+    "android": "react-native run-android",
+    "android:prodmode": "react-native run-android --variant=release",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "prettier -l 'src/**/*.{ts,tsx}' '__tests__/**/*.{ts,tsx}' && eslint 'src/**/*.{ts,tsx}' '__tests__/**/*.{ts,tsx}'",
+    "fmt": "prettier --write 'src/**/*.{ts,tsx}' '__tests__/**/*.{ts,tsx}'",
+    "typecheck": "tsc",
+    "clean": "rm -rf android/.gradle android/app/build ios/build",
+    "generate:icon": "react-native set-icon --path assets/icon.png",
+    "generate:splashscreen": "react-native set-splash --path assets/splash.png --resize cover --background '#FFFFFF'"
+  },
   "dependencies": {
     "react": "16.13.1",
+    "react-error-boundary": "^3.1.0",
     "react-native": "0.63.3"
   },
   "devDependencies": {
@@ -47,8 +48,8 @@
     ]
   },
   "prettier": {
-	"singleQuote": true,
-	"trailingComma": "es5",
-	"useTabs": true
-}
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "useTabs": true
+  }
 }
