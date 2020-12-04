@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
+const colors = { white: '#ffffff', black: '#181a2f' };
+
 const baseappStyles = StyleSheet.create({
 	scrollView: {
 		backgroundColor: Colors.lighter,
@@ -51,4 +53,14 @@ const errorHandlerStyles = StyleSheet.create({
 	},
 });
 
-export { baseappStyles, errorHandlerStyles };
+const screenLoaderStyles = StyleSheet.create({
+	background: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: colors.white,
+	},
+	text: { marginBottom: 10, color: colors.black },
+});
+
+export { colors, baseappStyles, errorHandlerStyles, screenLoaderStyles };
