@@ -1,8 +1,16 @@
 import { Languages, Texts } from './types';
 
 const languages: Languages = {
-	en: { somethingWentWrong: 'Something went wrong !' },
-	fr: { somethingWentWrong: 'Quelque chose cloche !' },
+	en: {
+		somethingWentWrong: 'Something went wrong !',
+		loading: 'Loading...',
+		miscellaneous: 'Miscellaneous',
+	},
+	fr: {
+		somethingWentWrong: 'Quelque chose cloche !',
+		loading: 'Chargement...',
+		miscellaneous: 'Divers',
+	},
 };
 
 const __ = (key: keyof Texts, ...values: string[]) => {

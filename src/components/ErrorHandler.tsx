@@ -5,7 +5,7 @@ import { __ } from '../i18n';
 import { errorHandlerStyles } from '../styles';
 
 const myErrorHandler = (error: Error) => {
-	console.log(__('somethingWentWrong'), error);
+	console.log('Something went wrong !', error);
 };
 
 const ErrorFallback: ({
