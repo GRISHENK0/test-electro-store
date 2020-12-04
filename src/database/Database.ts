@@ -64,65 +64,29 @@ class Database {
 			);
 
 			const appliedMigrations: DbMigration[] = parseResultSet(results);
-			console.log(appliedMigrations, migrations);
 
 			if (appliedMigrations.length === 0) {
-				try {
-					await this.sqliteDb.transaction((tx) => {
-						migration.queries.forEach((query) => {
-							tx.executeSql(query);
-						});
+				await this.sqliteDb.transaction((tx) => {
+					migration.queries.forEach((query) => {
+						tx.executeSql(query);
 					});
-				} catch (error) {
-					console.log(error);
-				}
+				});
 
 				const date = new Date();
 				const version = `${date.getUTCFullYear()}${date.getUTCMonth()}${date.getUTCDate()}${date.getUTCHours()}${date.getUTCMinutes()}${date.getUTCSeconds()}`;
 
-				try {
-					await this.sqliteDb.executeSql(
-						'INSERT INTO migrations (id, version, migration_name, start_time, end_time) VALUES (?, ?, ?, ?, ?);',
-						[
-							uuidv1(),
-							version,
-							migration.name,
-							date.toISOString(),
-							date.toISOString(),
-						]
-					);
-					console.log('insertion faite');
-				} catch (error) {
-					console.log(error);
-				}
+				await this.sqliteDb.executeSql(
+					'INSERT INTO migrations (id, version, migration_name, start_time, end_time) VALUES (?, ?, ?, ?, ?);',
+					[
+						uuidv1(),
+						version,
+						migration.name,
+						date.toISOString(),
+						date.toISOString(),
+					]
+				);
 			}
 		});
-
-		/*
-		for (const migration of migrations) {
-			if (
-				appliedMigrations.find(
-					(appliedMigration) =>
-						appliedMigration.migration_name === migration.name
-				)
-			) {
-				continue;
-			}
-
-			await this.sqliteDb.transaction((tx) => {
-				migration.queries.forEach((query) => {
-					tx.executeSql(query);
-				});
-			});
-
-			const date = new Date();
-			const version = `${date.getUTCFullYear()}${date.getUTCMonth()}${date.getUTCDate()}${date.getUTCHours()}${date.getUTCMinutes()}${date.getUTCSeconds()}`;
-
-			await this.sqliteDb.executeSql(
-				'INSERT INTO migrations (id, version, migration_name, start_time, end_time) VALUES (?, ?, ?, ?, ?);',
-				[uuidv1(), version, migration.name, date.toISOString(), date.toISOString()]
-			);
-		}*/
 	};
 }
 

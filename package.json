@@ -1,10 +1,11 @@
 {
   "name": "test-electro-store",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": false,
   "scripts": {
     "android": "react-native run-android",
-    "android:prodmode": "react-native run-android --variant=release",
+	"android:prodmode": "react-native run-android --variant=release",
+	"build:release": "ORG_GRADLE_PROJECT_bundleInArRelease=true react-native run-android --variant Release",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
