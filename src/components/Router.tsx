@@ -5,6 +5,10 @@ import CartScreen from '../screens/CartScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ItemScreen from '../screens/ItemScreen';
 import ScanScreen from '../screens/ScanScreen';
+import HomeIcon from '../../assets/icons/home-solid.svg';
+import BarcodeIcon from '../../assets/icons/barcode-solid.svg';
+import ShoppingBasketIcon from '../../assets/icons/shopping-basket-solid.svg';
+import { colors } from '../styles';
 
 const MainStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -23,10 +27,10 @@ const Router: React.FunctionComponent = () => {
 						backBehavior="initialRoute"
 						tabBarOptions={{
 							showLabel: false,
-							activeTintColor: 'black',
-							inactiveTintColor: 'gray',
+							activeTintColor: colors.black,
+							inactiveTintColor: colors.gray,
 							style: {
-								shadowColor: 'gray',
+								shadowColor: colors.gray,
 								shadowOpacity: 0.4,
 								shadowOffset: { height: -1, width: 0 },
 								shadowRadius: 5,
@@ -34,9 +38,36 @@ const Router: React.FunctionComponent = () => {
 							},
 						}}
 					>
-						<Tab.Screen name="Home">{() => <HomeScreen />}</Tab.Screen>
-						<Tab.Screen name="Scan">{() => <ScanScreen />}</Tab.Screen>
-						<Tab.Screen name="Cart">{() => <CartScreen />}</Tab.Screen>
+						<Tab.Screen
+							name="Home"
+							options={{
+								tabBarIcon: ({ color }) => (
+									<HomeIcon width={34} height={34} fill={color} />
+								),
+							}}
+						>
+							{() => <HomeScreen />}
+						</Tab.Screen>
+						<Tab.Screen
+							name="Scan"
+							options={{
+								tabBarIcon: ({ color }) => (
+									<BarcodeIcon width={34} height={34} fill={color} />
+								),
+							}}
+						>
+							{() => <ScanScreen />}
+						</Tab.Screen>
+						<Tab.Screen
+							name="Cart"
+							options={{
+								tabBarIcon: ({ color }) => (
+									<ShoppingBasketIcon width={34} height={34} fill={color} />
+								),
+							}}
+						>
+							{() => <CartScreen />}
+						</Tab.Screen>
 					</Tab.Navigator>
 				)}
 			</MainStack.Screen>
