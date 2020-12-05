@@ -1,11 +1,11 @@
 {
   "name": "test-electro-store",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": false,
   "scripts": {
     "android": "react-native run-android",
-	"android:prodmode": "react-native run-android --variant=release",
-	"build:release": "ORG_GRADLE_PROJECT_bundleInArRelease=true react-native run-android --variant Release",
+    "android:prodmode": "react-native run-android --variant=release",
+    "android:release": "ORG_GRADLE_PROJECT_bundleInArRelease=true react-native run-android --variant Release",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
@@ -17,10 +17,18 @@
     "generate:splashscreen": "react-native set-splash --path assets/splash.png --resize cover --background '#FFFFFF'"
   },
   "dependencies": {
+    "@react-native-community/masked-view": "0.1.10",
+    "@react-navigation/bottom-tabs": "5.11.2",
+    "@react-navigation/native": "5.8.10",
+    "@react-navigation/stack": "5.12.8",
     "react": "17.0.1",
     "react-error-boundary": "3.1.0",
     "react-native": "0.63.4",
+    "react-native-gesture-handler": "1.9.0",
     "react-native-get-random-values": "1.5.0",
+    "react-native-reanimated": "1.13.2",
+    "react-native-safe-area-context": "3.1.9",
+    "react-native-screens": "2.15.0",
     "react-native-sqlite-storage": "5.0.0",
     "uuid": "8.3.1"
   },

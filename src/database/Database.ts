@@ -1,7 +1,6 @@
 import SQLite from 'react-native-sqlite-storage';
 import { DbMigration } from '../types';
 import migrations from './migrations';
-import 'react-native-get-random-values';
 import { v1 as uuidv1 } from 'uuid';
 
 SQLite.enablePromise(true);
