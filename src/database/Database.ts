@@ -1,5 +1,5 @@
 import SQLite from 'react-native-sqlite-storage';
-import { DbMigration } from '../types';
+import { DbMigration, Item } from '../types';
 import migrations from './migrations';
 import { v1 as uuidv1 } from 'uuid';
 
@@ -86,6 +86,93 @@ class Database {
 				);
 			}
 		});
+	};
+
+	ItemsSoftUpsert = async (items: Item[]) => {
+		await this.sqliteDb.transaction((tx) => {
+			items.forEach(
+				({
+					id,
+					name,
+					description,
+					pictureName,
+					category,
+					price,
+					ean13,
+					isInStock,
+					created,
+					modified,
+				}) => {
+					tx.executeSql(
+						`INSERT INTO items (id, name, description, picture_name, category, price, ean13, is_in_stock, created, modified)
+								VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+								ON CONFLICT(id) DO UPDATE SET
+									name = excluded.name,
+									description = excluded.description,
+									picture_name = excluded.picture_name,
+									category = excluded.category,
+									price = excluded.price,
+									ean13 = excluded.ean13,
+									is_in_stock = excluded.is_in_stock,
+									created = excluded.created,
+									modified = excluded.modified
+									WHERE excluded.id = items.id;`,
+						[
+							id,
+							name,
+							description,
+							pictureName,
+							category,
+							price,
+							ean13,
+							isInStock ? 1 : 0,
+							created,
+							modified,
+						]
+					);
+				}
+			);
+		});
+	};
+
+	selectAllItems = async () => {
+		const [ItemsResults] = await this.sqliteDb.executeSql(
+			'SELECT * FROM items'
+		);
+
+		const dbItems = parseResultSet(ItemsResults);
+
+		const items: Item[] = [];
+
+		dbItems.forEach(
+			({
+				id,
+				name,
+				description,
+				picture_name,
+				category,
+				price,
+				ean13,
+				is_in_stock,
+				created,
+				modified,
+			}) => {
+				items.push({
+					id,
+					name,
+					description,
+					pictureName: picture_name,
+					category,
+					price,
+					ean13,
+					isInStock: is_in_stock ? true : false,
+					created,
+					modified,
+				});
+			}
+		);
+
+		return items;
 	};
 }
 

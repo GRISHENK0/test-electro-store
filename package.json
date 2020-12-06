@@ -1,6 +1,6 @@
 {
   "name": "test-electro-store",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "private": false,
   "scripts": {
     "android": "react-native run-android",

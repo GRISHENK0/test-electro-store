@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { SafeAreaView } from 'react-native';
+import { Alert, SafeAreaView } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 
 const ScanScreen: React.FunctionComponent = () => {
@@ -16,7 +16,12 @@ const ScanScreen: React.FunctionComponent = () => {
 				style={{ height: '100%', width: '100%' }}
 				captureAudio={false}
 				onBarCodeRead={({ data }) => {
-					console.log(data);
+					Alert.alert(
+						'Code barre détecté',
+						data,
+						[{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+						{ cancelable: false }
+					);
 				}}
 			/>
 		</SafeAreaView>

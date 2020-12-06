@@ -5,13 +5,16 @@ import React from 'react';
 import { DbProvider } from './components/DbProvider';
 import ErrorHandler from './components/ErrorHandler';
 import Router from './components/Router';
+import { ApiProvider } from './components/ApiProvider';
 
 const App: React.FunctionComponent = () => {
 	return (
 		<ErrorHandler>
 			<NavigationContainer>
 				<DbProvider>
-					<Router />
+					<ApiProvider>
+						<Router />
+					</ApiProvider>
 				</DbProvider>
 			</NavigationContainer>
 		</ErrorHandler>
