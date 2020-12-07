@@ -1,7 +1,13 @@
 import { StyleSheet } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-const colors = { white: '#ffffff', black: '#181a2f', gray: '#757575' };
+const colors = {
+	white: '#ffffff',
+	black: '#181a2f',
+	gray: '#757575',
+	green: '#6dea4f',
+	red: '#ff4d4d',
+};
 
 const baseappStyles = StyleSheet.create({
 	scrollView: {

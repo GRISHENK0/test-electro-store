@@ -39,7 +39,7 @@ const Router: React.FunctionComponent = () => {
 						}}
 					>
 						<Tab.Screen
-							name="Home"
+							name="HomeScreen"
 							options={{
 								tabBarIcon: ({ color }) => (
 									<HomeIcon width={34} height={34} fill={color} />
@@ -49,7 +49,7 @@ const Router: React.FunctionComponent = () => {
 							{() => <HomeScreen />}
 						</Tab.Screen>
 						<Tab.Screen
-							name="Scan"
+							name="ScanScreen"
 							options={{
 								tabBarIcon: ({ color }) => (
 									<BarcodeIcon width={34} height={34} fill={color} />
@@ -59,7 +59,7 @@ const Router: React.FunctionComponent = () => {
 							{() => <ScanScreen />}
 						</Tab.Screen>
 						<Tab.Screen
-							name="Cart"
+							name="CartScreen"
 							options={{
 								tabBarIcon: ({ color }) => (
 									<ShoppingBasketIcon width={34} height={34} fill={color} />
@@ -71,7 +71,9 @@ const Router: React.FunctionComponent = () => {
 					</Tab.Navigator>
 				)}
 			</MainStack.Screen>
-			<MainStack.Screen name="Item">{() => <ItemScreen />}</MainStack.Screen>
+			<MainStack.Screen name="ItemScreen">
+				{() => <ItemScreen />}
+			</MainStack.Screen>
 		</MainStack.Navigator>
 	);
 };

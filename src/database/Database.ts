@@ -1,5 +1,5 @@
 import SQLite from 'react-native-sqlite-storage';
-import { DbMigration, Item } from '../types';
+import { CartItem, DbMigration, Item } from '../types';
 import migrations from './migrations';
 import { v1 as uuidv1 } from 'uuid';
 
@@ -95,7 +95,7 @@ class Database {
 					id,
 					name,
 					description,
-					pictureName,
+					pictureBase64,
 					category,
 					price,
 					ean13,
@@ -104,24 +104,24 @@ class Database {
 					modified,
 				}) => {
 					tx.executeSql(
-						`INSERT INTO items (id, name, description, picture_name, category, price, ean13, is_in_stock, created, modified)
-								VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-								ON CONFLICT(id) DO UPDATE SET
-									name = excluded.name,
-									description = excluded.description,
-									picture_name = excluded.picture_name,
-									category = excluded.category,
-									price = excluded.price,
-									ean13 = excluded.ean13,
-									is_in_stock = excluded.is_in_stock,
-									created = excluded.created,
-									modified = excluded.modified
-									WHERE excluded.id = items.id;`,
+						`INSERT INTO items (id, name, description, picture_base64, category, price, ean13, is_in_stock, created, modified)
+							VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+							ON CONFLICT(id) DO UPDATE SET
+								name = excluded.name,
+								description = excluded.description,
+								picture_base64 = excluded.picture_base64,
+								category = excluded.category,
+								price = excluded.price,
+								ean13 = excluded.ean13,
+								is_in_stock = excluded.is_in_stock,
+								created = excluded.created,
+								modified = excluded.modified
+								WHERE excluded.id = id;`,
 						[
 							id,
 							name,
 							description,
-							pictureName,
+							pictureBase64,
 							category,
 							price,
 							ean13,
@@ -135,9 +135,36 @@ class Database {
 		});
 	};
 
+	selectItemByBarcode = async (barcode: string) => {
+		const [
+			ItemResult,
+		] = await this.sqliteDb.executeSql('SELECT * FROM items WHERE ean13 = ?;', [
+			barcode,
+		]);
+
+		const dbItem = parseResultSet(ItemResult);
+
+		if (dbItem.length === 0) {
+			return null;
+		}
+
+		return {
+			id: dbItem[0].id,
+			name: dbItem[0].name,
+			description: dbItem[0].description,
+			pictureBase64: dbItem[0].picture_base64,
+			category: dbItem[0].category,
+			price: dbItem[0].price,
+			ean13: dbItem[0].ean13,
+			isInStock: dbItem[0].is_in_stock ? true : false,
+			created: dbItem[0].created,
+			modified: dbItem[0].modified,
+		} as Item;
+	};
+
 	selectAllItems = async () => {
 		const [ItemsResults] = await this.sqliteDb.executeSql(
-			'SELECT * FROM items'
+			'SELECT * FROM items;'
 		);
 
 		const dbItems = parseResultSet(ItemsResults);
@@ -149,7 +176,7 @@ class Database {
 				id,
 				name,
 				description,
-				picture_name,
+				picture_base64,
 				category,
 				price,
 				ean13,
@@ -161,7 +188,7 @@ class Database {
 					id,
 					name,
 					description,
-					pictureName: picture_name,
+					pictureBase64: picture_base64,
 					category,
 					price,
 					ean13,
@@ -173,6 +200,85 @@ class Database {
 		);
 
 		return items;
+	};
+
+	upsertCartItem = async (itemId: string) => {
+		const [
+			CartItemResult,
+		] = await this.sqliteDb.executeSql(
+			'SELECT quantity FROM cart_items WHERE item_id = ?;',
+			[itemId]
+		);
+
+		const dbCartItem = parseResultSet(CartItemResult);
+
+		const quantity = dbCartItem.length === 0 ? 1 : dbCartItem[0].quantity;
+
+		await this.sqliteDb.executeSql(
+			`INSERT INTO cart_items (id, item_id, quantity)
+				VALUES(?, ?, ?)
+				ON CONFLICT(item_id) DO UPDATE SET
+					quantity = excluded.quantity + 1
+					WHERE excluded.item_id = item_id;`,
+			[uuidv1(), itemId, quantity]
+		);
+	};
+
+	selectAllCartItems = async () => {
+		const [CartItemsResults] = await this.sqliteDb.executeSql(
+			`SELECT cart_items.id, cart_items.quantity, cart_items.item_id, items.name, items.description, items.picture_base64, items.category, items.price, items.ean13, items.is_in_stock, items.created, items.modified FROM cart_items
+			INNER JOIN items ON cart_items.item_id = items.id;`
+		);
+
+		const dbCartItems = parseResultSet(CartItemsResults);
+
+		const cartItems: CartItem[] = [];
+
+		dbCartItems.forEach(
+			({
+				id,
+				quantity,
+				item_id,
+				name,
+				description,
+				picture_base64,
+				category,
+				price,
+				ean13,
+				is_in_stock,
+				created,
+				modified,
+			}) => {
+				cartItems.push({
+					id,
+					quantity,
+					item: {
+						id: item_id,
+						name,
+						description,
+						pictureBase64: picture_base64,
+						category,
+						price,
+						ean13,
+						isInStock: is_in_stock ? true : false,
+						created,
+						modified,
+					},
+				});
+			}
+		);
+
+		return cartItems;
+	};
+
+	deleteCartItem = async (cartItemId: string) => {
+		await this.sqliteDb.executeSql('DELETE FROM cart_items WHERE id = ?;', [
+			cartItemId,
+		]);
+	};
+
+	deleteAllCartItems = async () => {
+		await this.sqliteDb.executeSql('DELETE FROM cart_items;');
 	};
 }
 
